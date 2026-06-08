@@ -19,6 +19,7 @@ import {
   ExternalLink,
   Check,
   Trash2,
+  Menu,
 } from "lucide-react";
 
 /* ─── Notification Data ─── */
@@ -106,7 +107,7 @@ const initialNotifications: Notification[] = [
   },
 ];
 
-export function Header() {
+export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -149,15 +150,26 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-14 bg-background/90 backdrop-blur-md border-b border-border flex items-center justify-between px-5">
-      {/* Search */}
-      <div className="relative w-full max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-full pl-9 pr-4 py-1.5 bg-secondary/70 rounded-md text-sm text-foreground placeholder:text-muted-foreground border border-transparent focus:border-primary/30 focus:bg-background transition-all"
-        />
+    <header className="sticky top-0 z-30 h-14 bg-background/90 backdrop-blur-md border-b border-border flex items-center justify-between px-4 md:px-5">
+      {/* Left side: Menu toggle & Search */}
+      <div className="flex items-center flex-1 gap-3">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={onMenuClick}
+          className="md:hidden p-1.5 -ml-1.5 rounded-md hover:bg-secondary text-muted-foreground"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        {/* Search */}
+        <div className="relative w-full max-w-sm hidden sm:block">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full pl-9 pr-4 py-1.5 bg-secondary/70 rounded-md text-sm text-foreground placeholder:text-muted-foreground border border-transparent focus:border-primary/30 focus:bg-background transition-all"
+          />
+        </div>
       </div>
 
       {/* Right side */}

@@ -31,15 +31,17 @@ const navItems = [
   { href: "/mentor", label: "AI Mentor", icon: Bot },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
 
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-sidebar-bg border-r border-sidebar-border sidebar-transition flex flex-col select-none",
-        collapsed ? "w-[56px]" : "w-[240px]"
+        "fixed left-0 top-0 z-40 h-screen bg-sidebar-bg border-r border-sidebar-border flex flex-col select-none transition-transform duration-300 md:translate-x-0",
+        isOpen ? "translate-x-0" : "-translate-x-full",
+        collapsed ? "md:w-[56px]" : "md:w-[240px]",
+        "w-[240px]" // Always 240px on mobile
       )}
     >
       {/* Logo */}
@@ -70,6 +72,9 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => {
+                if (window.innerWidth < 768 && onClose) onClose();
+              }}
               title={collapsed ? item.label : undefined}
               className={cn(
                 "flex items-center gap-2.5 px-2.5 py-[7px] rounded-md text-[13px] font-medium transition-all duration-150 group relative",
@@ -95,8 +100,8 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Collapse button */}
-      <div className="border-t border-sidebar-border p-2 shrink-0">
+      {/* Collapse button - hidden on mobile */}
+      <div className="border-t border-sidebar-border p-2 shrink-0 hidden md:block">
         <button
           onClick={() => setCollapsed(!collapsed)}
           className={cn(
