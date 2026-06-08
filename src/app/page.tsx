@@ -27,36 +27,7 @@ import {
   BarChart3,
 } from "lucide-react";
 
-/* ─── Animated Counter ─── */
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
 
-  useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [isInView, target]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {count.toLocaleString()}
-      {suffix}
-    </span>
-  );
-}
 
 /* ─── Feature Card ─── */
 const features = [
@@ -192,32 +163,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── Stats ─── */}
-      <section className="py-16 px-6 border-y border-border bg-secondary/30">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { icon: Users, value: 50000, suffix: "+", label: "Students Trained" },
-            { icon: FileText, value: 125000, suffix: "+", label: "Resumes Analyzed" },
-            { icon: MessageSquare, value: 80000, suffix: "+", label: "Mock Interviews" },
-            { icon: Award, value: 94, suffix: "%", label: "Success Rate" },
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="space-y-2"
-            >
-              <stat.icon className="w-6 h-6 text-primary mx-auto" />
-              <div className="text-3xl md:text-4xl font-extrabold text-foreground">
-                <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-              </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+
 
       {/* ─── Features ─── */}
       <section id="features" className="py-24 px-6">
